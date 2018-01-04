@@ -24,7 +24,6 @@ registerBlockType('guten-script/style-block', {
                 trigger: 'enter',
                 // regExp: /^```$/,
                 transform:function( attributes ){
-                    console.log( 'transform');
                     createBlock( 'guten-script/style-block' ,attributes )},
             },
             {
@@ -37,13 +36,13 @@ registerBlockType('guten-script/style-block', {
         ]
     },
     edit: function (props) {
-        console.log( 'edit runnuing' );
+
         var  content =  props.attributes.content;
-        console.log( content );
+
         function onChangeContent(newStyle) {
 
             props.setAttributes({ content : newStyle });
-            console.log(newStyle);
+
         }
         return el(
             Editable,
@@ -60,10 +59,9 @@ registerBlockType('guten-script/style-block', {
 
     save: function ( props ) {
 
-        console.log( 'save runing..');
+
         //var  content =  'fadsfaf';
         var  content =  props.attributes.content;
-        console.log( content );
         return el('style' , { className: props.className } ,  content);
     }
 
