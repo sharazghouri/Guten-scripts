@@ -4,10 +4,12 @@
     var el = wp.element.createElement,
         registerBlockType = wp.blocks.registerBlockType,
         Editable = wp.blocks.Editable;
+    createBlock = wp.blocks.createBlock;
 
 
+    // style block
     registerBlockType('guten-script/style-block', {
-        title:'style',
+        title: 'style',
         icon: 'art',
         category: 'formatting',
 
@@ -16,8 +18,9 @@
         attributes: {
 
             content: {
-                source: 'children',
-                selector: '.wp-block-guten-script-style-block'
+                source: 'text',
+                selector: '.wp-block-guten-script-style-block',
+
             },
 
 
@@ -28,36 +31,85 @@
         },
 
         edit: function (props) {
-            console.log( 'edit runnuing' );
+            console.log('edit runnuing');
 
-            var  content =  props.attributes.content;
-            console.log( content );
+            var content = props.attributes.content;
+            console.log(content);
+
             function onChangeContent(newStyle) {
 
-                props.setAttributes({ content : newStyle });
+                props.setAttributes({content: newStyle.target.value});
                 console.log(newStyle);
             }
 
             return el(
-                Editable,
+                'textarea',
                 {
-                    tagName: 'p',
                     className: props.className,
-                    onFocus: props.setFocus,
-                    value: content,
                     onChange: onChangeContent,
-
-                }
+                    value: content,
+                    placeholder:  ' Your css code ....'
+                },
             )
         },
 
-        save: function ( props ) {
+        save: function (props) {
+            var content = props.attributes.content;
 
-            console.log( 'save runing..');
-            //var  content =  'fadsfaf';
-            var  content =  props.attributes.content;
-            console.log( content );
-            return el('script' , { className: props.className } ,  content);
+            return el('style', {dangerouslySetInnerHTML: {__html: content}});
+        }
+
+    });
+
+   // script block
+    registerBlockType('guten-script/script-block', {
+        title: 'script',
+        icon: 'editor-code',
+        category: 'formatting',
+
+        keywords: ['java script', 'script','js'],
+
+        attributes: {
+
+            content: {
+                source: 'text',
+                selector: '.wp-block-guten-script-script-block',
+
+            },
+
+
+        },
+        supports: {
+            html: false,
+            customClassName: false,
+        },
+
+        edit: function (props) {
+            console.log('edit runnuing');
+
+            var content = props.attributes.content;
+            console.log(content);
+
+            function onChangeContent(newStyle) {
+
+                props.setAttributes({content: newStyle.target.value});
+                console.log(newStyle);
+            }
+
+            return el(
+                'textarea',
+                {
+                    className: props.className,
+                    onChange: onChangeContent,
+                    value: content,
+                    placeholder: ' Your js code ....'
+                },
+            )
+        },
+
+        save: function (props) {
+            var content = props.attributes.content;
+            return el('script', {dangerouslySetInnerHTML: { __html: content}});
         }
 
     });
@@ -66,12 +118,3 @@
 
 
 
-(function ($) {
-
-    $('.wp-block-guten-script-style-block').keyup(function(event) {
-        if (event.text.charCodeAt() == '10') {
-            event.preventDefault();
-        }
-    });
-
-})(jQuery);
